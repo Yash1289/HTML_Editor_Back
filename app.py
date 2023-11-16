@@ -14,9 +14,9 @@ from dotenv import load_dotenv
 
 
 #Initializing our app 
-app = Flask(__name__, static_url_path='', static_folder='../client/build',template_folder='../client/build')
+app = Flask(__name__, static_url_path='')
 
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')  
+app.config['JWT_SECRET_KEY'] = "HTML_Editor"
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 jwt = JWTManager(app)
 
@@ -67,8 +67,6 @@ def login():
     user_info = requests.get('https://www.googleapis.com/oauth2/v3/userinfo', headers=headers).json()
 
     user_info['access_token'] = response["access_token"]
-
-    print(user_info["access_token"])
   
     jwt_token = create_access_token(identity=user_info['email'])  # create jwt token
 

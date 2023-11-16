@@ -55,6 +55,7 @@
 
 @page { size: A4 Potrait;
 	margin: 1.5cm 1.27cm 1.75cm 1.27cm;
+  font-family: Karma;
   @top-left {
     content: '2023 मध्य प्रदेश विधानसभा चुनाव';
 	  word-wrap: break-word;
@@ -101,10 +102,6 @@
   string-set : foot_text content();
 }
  
-.text_bold{
-  font-weight: bold;
-}
-
 }
 @page :blank {
   @top-left { background: none; content: '' }
@@ -158,8 +155,6 @@ h1 {
 }
   
 
-
-}
 h2, h3, h4 {
   color: black;
   font-weight: 400;
@@ -510,6 +505,9 @@ color: #000000;
   font-variant-numeric: oldstyle-nums tabular-nums;
 }
 
+
+
+
 .dataframe {
   border-collapse: collapse;
   margin: 10px 0;
@@ -520,21 +518,6 @@ color: #000000;
 	margin-right: auto;
   table-layout: fixed;
   font-size: 16px;
-}
-
-.dataframe tbody span .boldText {
-  font-weight: bold;
-  color:#000000;
- }
-
-.boldText {
-  font-weight: bold;
-  color:#000000;
-}
-
-.dataframe .boldText {
-  font-weight: bold;
-  color:#000000;
 }
 
 .left_box_color{
@@ -561,10 +544,7 @@ color: #000000;
 .left_box_color td:first-child
  { font-weight: bold }
 
- .dataframe thead {
-  font-weight: bold;
-  color:#000000;
- }
+
 
 
 .dataframe thead th{
@@ -584,6 +564,10 @@ color: #000000;
 
 #chapter-title{
 	font-size: 40px;
+}
+
+* {
+  font-family: 'Karma', sans-serif;
 }
 
 /* .dataframe tbody th {

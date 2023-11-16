@@ -1,3 +1,4 @@
 .env
 /html_editor_frontend
 __pycache__/
+/env
