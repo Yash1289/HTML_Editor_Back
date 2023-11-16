@@ -14,9 +14,9 @@ from dotenv import load_dotenv
 
 
 #Initializing our app 
-app = Flask(__name__, static_url_path='', static_folder='html_editor_frontend/build')
+app = Flask(__name__, static_url_path='', static_folder='../client/build',template_folder='../client/build')
 
-app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')  # Replace with your own secret key
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')  
 app.config['JWT_TOKEN_LOCATION'] = ['cookies']
 jwt = JWTManager(app)
 
@@ -82,6 +82,15 @@ def login():
 
     return response, 200
     
+@app.route('/time')
+@cross_origin()
+def get_time():
+    # Create a JSON object with the current time
+    current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    json_response = {'time': current_time}
+
+    # Return the JSON response
+    return jsonify(json_response)    
 
 @app.route('/')
 @cross_origin()
