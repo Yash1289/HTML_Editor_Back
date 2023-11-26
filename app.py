@@ -3,7 +3,7 @@ from ctypes.wintypes import POINT
 from re import U
 import os
 import io
-from flask import Flask , request , send_from_directory, jsonify, make_response
+from flask import Flask , request , send_from_directory, jsonify, make_response, send_file
 from flask_jwt_extended import create_access_token, JWTManager, jwt_required, get_jwt_identity
 from flask_cors import CORS , cross_origin
 from werkzeug.utils import secure_filename
@@ -49,7 +49,8 @@ def htmlUpload():
             return {"Status": "Error encountered"}, 500
     
 @app.route('/google_login', methods=['POST'])
-def login():
+@cross_origin()
+def login():  
     auth_code = request.get_json()['code']
 
     data = {
@@ -57,7 +58,7 @@ def login():
         'client_id': os.getenv('GOOGLE_CLIENT_ID'),  # client ID from the credential at google developer console
         'client_secret': os.getenv('GOOGLE_CLIENT_SECRET'),  # client secret from the credential at google developer console
         'redirect_uri': 'postmessage',
-        'grant_type': 'authorization_code'
+        'grant_type': 'authorization_code' 
     }
 
     response = requests.post('https://oauth2.googleapis.com/token', data=data).json()
@@ -88,7 +89,19 @@ def get_time():
     json_response = {'time': current_time}
 
     # Return the JSON response
-    return jsonify(json_response)    
+    return jsonify(json_response)   
+
+
+@app.route('/download')
+@cross_origin()
+def download_file():
+    # Assuming 'edited.pdf' is in the 'temp' folder
+    pdf_path = file_path.replace(".html", ".pdf")
+
+    # Send the file as an attachment with a specific filename
+    return send_file(pdf_path, as_attachment=True, download_name='edited.pdf')
+
+
 
 @app.route('/')
 @cross_origin()
