@@ -2,7 +2,7 @@
 Contains HTML table generator module
 """
 
-from weasyprint.text.fonts import FontConfiguration
+from weasyprint.fonts import FontConfiguration
 from weasyprint import HTML, CSS
 
 from dominate import document
