@@ -5,6 +5,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter, A4
 import os
 from PIL import Image
+import asyncio
 
 LOGO_FILE = "Dhruva Logo.png"
 LOGO_PATH = os.path.join(os.path.dirname(__file__), "..", LOGO_FILE)
@@ -14,7 +15,7 @@ x_start = (10) * mm
 y_start = (-84.6) * mm
 logo_width = (24) * mm
 
-def add_logo_to_pdf(input_file,output_file,img_file,x_start, y_start,logo_width):
+async def add_logo_to_pdf(input_file,output_file,img_file,x_start, y_start,logo_width):
  
     packet = '_tmp.pdf' 
     # read the existing PDF 
@@ -37,6 +38,7 @@ def add_logo_to_pdf(input_file,output_file,img_file,x_start, y_start,logo_width)
         output.add_page(page)
  
     outputStream = open(output_file, "wb")
-    output.write(outputStream)
+    loop = asyncio.get_event_loop()
+    await loop.run_in_executor(None, output.write, outputStream)
     outputStream.close()
     os.remove(packet)

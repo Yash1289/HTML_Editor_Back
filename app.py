@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 import datetime
 from Utils.html_to_pdf import *
 import requests
+import asyncio
 from dotenv import load_dotenv
 
 
@@ -34,6 +35,10 @@ def htmlUpload():
     if request.method == "POST":
         # Storing the uploaded HTML file on the backend
         f = request.files['htmlFile']
+        header_value = request.form.get('header', '')
+        footer_value = request.form.get('footer', '')
+
+        print(header_value, footer_value)
         if f:
             # Check if the uploaded file has an HTML extension
             if f.filename.endswith(".html"):
@@ -41,8 +46,18 @@ def htmlUpload():
                 global file_path
                 file_path = os.path.join('temp_files', filename)
                 f.save(file_path)
-                PDFPrint(file_path)
-                return {"Status": "Successfully Uploaded"}, 201
+                
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                
+                try:
+                    loop.run_until_complete(PDFPrint(file_path, header_value, footer_value))
+                    pdf_path = file_path.replace(".html", ".pdf")
+                    
+                    return send_file(pdf_path, as_attachment=True, download_name='edited.pdf'), 201
+                finally:
+                    loop.close()
+
             else:
                 return {"Status": "Error: The uploaded file is not in HTML format"}, 500
         else:
@@ -90,18 +105,6 @@ def get_time():
 
     # Return the JSON response
     return jsonify(json_response)   
-
-
-@app.route('/download')
-@cross_origin()
-def download_file():
-    # Assuming 'edited.pdf' is in the 'temp' folder
-    pdf_path = file_path.replace(".html", ".pdf")
-
-    # Send the file as an attachment with a specific filename
-    return send_file(pdf_path, as_attachment=True, download_name='edited.pdf')
-
-
 
 @app.route('/')
 @cross_origin()
